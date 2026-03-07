@@ -15,53 +15,79 @@
 
         <section id="estacion-pesado" class="station">
             <div class="display-container">
-                <p class="instruccion">Paso 1: Pesa 18.0g de café en granos</p>
+                <p class="instruccion">Paso 1: Pesa 18.0g de café</p>
                 <div class="bascula">
                     <span id="peso-actual">0.0</span><span class="unit">g</span>
                 </div>
             </div>
             <div class="controls">
-                <button id="btn-verter" class="btn-main">Dejar presionado para verter</button>
+                <button id="btn-verter" class="btn-main">VERTER</button>
                 <button onclick="reiniciarPeso()" id="btn-reiniciar-peso" class="hidden">Reiniciar</button>
-                <button onclick="irA('estacion-molienda')" id="btn-ir-molienda" class="hidden btn-next">Siguiente: Moler →</button>
+                <button onclick="irA('estacion-molienda')" id="btn-ir-molienda" class="hidden btn-next">Moler →</button>
             </div>
         </section>
 
         <section id="estacion-molienda" class="station hidden">
             <div class="display-container">
-                <p id="instruccion-molienda" class="instruccion">Paso 2: Limpia el portafiltro y muele</p>
+                <p id="instruccion-molienda" class="instruccion">Paso 2: Limpia y Muele</p>
                 <div id="portafiltro-area-molienda" class="portafiltro-circle">
                     <div id="suciedad"></div>
                     <div id="cafe-molido" class="hidden"></div>
                 </div>
             </div>
             <div class="controls">
-                <button id="btn-moler" class="hidden btn-main">Mantener para moler</button>
-                <button onclick="irA('estacion-pesado')" class="btn-back">← Volver</button>
-                <button onclick="irA('estacion-tamp')" id="btn-ir-tamp" class="hidden btn-next">Siguiente: Nivelar →</button>
+                <button id="btn-moler" class="hidden btn-main">MOLER</button>
+                <button onclick="irA('estacion-tamp')" id="btn-ir-tamp" class="hidden btn-next">Nivelar →</button>
             </div>
         </section>
 
         <section id="estacion-tamp" class="station hidden">
             <div class="display-container">
-                <p id="instruccion-tamp" class="instruccion">Paso 3: Rompe los grumos (WDT) moviendo el dedo</p>
+                <p id="instruccion-tamp" class="instruccion">Paso 3: WDT y Presión</p>
                 <div id="area-tamp" class="portafiltro-circle">
                     <div id="cafe-puck"></div>
-                    <div id="grumos"></div> </div>
+                    <div id="grumos"></div>
+                </div>
                 <div id="medidor-presion" class="hidden">
                     <div id="zona-perfecta"></div>
                     <div id="aguja-presion"></div>
                 </div>
             </div>
             <div class="controls">
-                <button id="btn-tamp" class="hidden btn-main">Presionar Tamper</button>
-                <button onclick="irA('estacion-molienda')" class="btn-back">← Volver</button>
-                <button onclick="alert('¡Café listo para la máquina! (Próxima actualización: La Extracción)')" id="btn-finalizar" class="hidden btn-next">¡Perfecto! 🎉</button>
+                <button id="btn-tamp" class="hidden btn-main">TAMP</button>
+                <button onclick="irA('estacion-extraccion')" id="btn-ir-extraccion" class="hidden btn-next">Extraer →</button>
+            </div>
+        </section>
+
+        <section id="estacion-extraccion" class="station hidden">
+            <div class="display-container">
+                <p class="instruccion">Paso 4: Extrae 36.0g (Ratio 1:2)</p>
+                <div id="taza-area">
+                    <div id="chorro-cafe" class="hidden"></div>
+                    <div id="liquido-taza"></div>
+                </div>
+                <div class="bascula">
+                    <span id="peso-extraccion">0.0</span><span class="unit">g</span>
+                </div>
+            </div>
+            <div class="controls">
+                <button id="btn-extraer" class="btn-main">START</button>
+                <button onclick="irA('estacion-diseno')" id="btn-ir-diseno" class="hidden btn-next">Diseñar →</button>
+            </div>
+        </section>
+
+        <section id="estacion-diseno" class="station hidden">
+            <div class="display-container">
+                <p class="instruccion">Paso 5: Dibuja tu Arte Latte</p>
+                <canvas id="canvas-diseno" width="250" height="250"></canvas>
+            </div>
+            <div class="controls">
+                <button onclick="finalizarJuego()" class="btn-next">¡Servir Café! ☕</button>
             </div>
         </section>
 
         <footer>
-            <p id="pista">El WDT asegura que el agua pase uniformemente por el café.</p>
+            <p id="pista">Maestría es precisión sin prisa.</p>
         </footer>
     </div>
     <script src="script.js"></script>
