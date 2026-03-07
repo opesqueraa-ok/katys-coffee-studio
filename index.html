@@ -21,30 +21,47 @@
                 </div>
             </div>
             <div class="controls">
-                <button id="btn-verter">Dejar presionado para verter</button>
-                <button id="btn-reiniciar-peso" class="hidden">Reiniciar</button>
+                <button id="btn-verter" class="btn-main">Dejar presionado para verter</button>
+                <button onclick="reiniciarPeso()" id="btn-reiniciar-peso" class="hidden">Reiniciar</button>
                 <button onclick="irA('estacion-molienda')" id="btn-ir-molienda" class="hidden btn-next">Siguiente: Moler →</button>
             </div>
         </section>
 
         <section id="estacion-molienda" class="station hidden">
             <div class="display-container">
-                <p id="instruccion-molienda" class="instruccion">Paso 2: Limpia el portafiltro deslizando el dedo</p>
-                <div id="portafiltro-area">
-                    <div id="portafiltro">
-                        <div id="suciedad"></div> <div id="cafe-molido" class="hidden"></div>
-                    </div>
+                <p id="instruccion-molienda" class="instruccion">Paso 2: Limpia el portafiltro y muele</p>
+                <div id="portafiltro-area-molienda" class="portafiltro-circle">
+                    <div id="suciedad"></div>
+                    <div id="cafe-molido" class="hidden"></div>
                 </div>
             </div>
             <div class="controls">
-                <button id="btn-moler" class="hidden">Mantener para moler café</button>
+                <button id="btn-moler" class="hidden btn-main">Mantener para moler</button>
                 <button onclick="irA('estacion-pesado')" class="btn-back">← Volver</button>
-                <button id="btn-ir-wdt" class="hidden btn-next">Siguiente: Nivelar →</button>
+                <button onclick="irA('estacion-tamp')" id="btn-ir-tamp" class="hidden btn-next">Siguiente: Nivelar →</button>
+            </div>
+        </section>
+
+        <section id="estacion-tamp" class="station hidden">
+            <div class="display-container">
+                <p id="instruccion-tamp" class="instruccion">Paso 3: Rompe los grumos (WDT) moviendo el dedo</p>
+                <div id="area-tamp" class="portafiltro-circle">
+                    <div id="cafe-puck"></div>
+                    <div id="grumos"></div> </div>
+                <div id="medidor-presion" class="hidden">
+                    <div id="zona-perfecta"></div>
+                    <div id="aguja-presion"></div>
+                </div>
+            </div>
+            <div class="controls">
+                <button id="btn-tamp" class="hidden btn-main">Presionar Tamper</button>
+                <button onclick="irA('estacion-molienda')" class="btn-back">← Volver</button>
+                <button onclick="alert('¡Café listo para la máquina! (Próxima actualización: La Extracción)')" id="btn-finalizar" class="hidden btn-next">¡Perfecto! 🎉</button>
             </div>
         </section>
 
         <footer>
-            <p id="pista">La precisión es la clave de un buen espresso.</p>
+            <p id="pista">El WDT asegura que el agua pase uniformemente por el café.</p>
         </footer>
     </div>
     <script src="script.js"></script>
