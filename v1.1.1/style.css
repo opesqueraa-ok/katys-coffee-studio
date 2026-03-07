@@ -20,14 +20,9 @@ header { background: #000; color: #fff; padding: 10px; text-align: center; font-
 }
 
 .locked { opacity: 0.4; pointer-events: none; filter: grayscale(1); }
-
 .step-label { font-size: 0.75rem; font-weight: bold; color: var(--text); text-align: center; }
 
-.lcd-display {
-    background: #222; color: var(--lcd); font-family: monospace;
-    font-size: 1.8rem; padding: 5px 15px; border-radius: 5px; border: 2px solid #555;
-}
-
+.lcd-display { background: #222; color: var(--lcd); font-family: monospace; font-size: 1.8rem; padding: 5px 15px; border-radius: 5px; border: 2px solid #555; }
 .circle-ui { width: 100px; height: 100px; background: #444; border-radius: 50%; position: relative; overflow: hidden; border: 4px solid #222; }
 
 #suciedad { position: absolute; width: 100%; height: 100%; background: #2b1a0e; opacity: 0.8; z-index: 2; }
@@ -35,22 +30,23 @@ header { background: #000; color: #fff; padding: 10px; text-align: center; font-
 #grumos { position: absolute; width: 100%; height: 100%; background: radial-gradient(#111 15%, transparent 20%); background-size: 15px 15px; opacity: 0.8; }
 #cafe-puck { position: absolute; width: 100%; height: 100%; background: #3d2b1f; }
 
-/* WDT Progress */
 .progress-bar-container { width: 80%; height: 6px; background: #eee; border-radius: 3px; overflow: hidden; }
 #wdt-progress { width: 0%; height: 100%; background: var(--accent); }
 
-/* Pressure */
 .pressure-gauge { width: 100px; height: 10px; background: #ccc; position: relative; margin-top: 5px; border-radius: 5px; }
 #gauge-zone { position: absolute; left: 70%; width: 20%; height: 100%; background: #4caf50; opacity: 0.5; }
 #needle { position: absolute; left: 0; width: 4px; height: 100%; background: red; }
 
-/* Cup */
-.cup-container { width: 80px; height: 60px; background: #fff; border: 2px solid #ccc; border-radius: 0 0 30px 30px; position: relative; overflow: hidden; }
-#stream { width: 4px; height: 60px; background: #3d2b1f; position: absolute; left: 48%; top: -60px; }
-#liquid { position: absolute; bottom: 0; width: 100%; height: 0%; background: #2b1a0e; }
+/* Cup & Target Line */
+.cup-container { width: 80px; height: 80px; background: #fff; border: 2px solid #ccc; border-radius: 0 0 30px 30px; position: relative; overflow: hidden; }
+#stream { width: 4px; height: 80px; background: #3d2b1f; position: absolute; left: 48%; top: -80px; }
+#liquid { position: absolute; bottom: 0; width: 100%; height: 0%; background: #2b1a0e; transition: height 0.1s; }
+#target-line { position: absolute; bottom: 70%; width: 100%; border-bottom: 2px dashed #4caf50; z-index: 5; opacity: 0.6; }
+
+/* Arte Latte Buttons */
+.art-options { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+.art-btn { background: #f4ece1; border: 2px solid var(--accent); color: var(--accent); padding: 10px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; }
 
 .main-btn { background: var(--accent); color: #fff; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; }
-.reset-btn { font-size: 0.6rem; color: #888; border: none; background: none; text-decoration: underline; }
 .success { background: #4caf50; }
 .hidden { display: none; }
-canvas { background: #2b1a0e; border-radius: 50%; border: 3px solid #fff; }
