@@ -4,97 +4,72 @@
     --acento: #8b5a2b;
     --exito: #4caf50;
     --gris: #999;
+    --alerta: #e74c3c;
 }
 
 body {
     margin: 0;
     background-color: var(--crema);
     color: var(--cafe-oscuro);
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Helvetica Neue', sans-serif;
     display: flex;
     justify-content: center;
-    touch-action: none; /* Evita zoom accidental en iPad */
+    touch-action: none;
 }
 
 #game-container {
-    width: 100vw;
-    height: 100vh;
+    width: 100vw; height: 100vh;
     max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    box-sizing: border-box;
+    display: flex; flex-direction: column;
+    padding: 20px; box-sizing: border-box;
 }
 
-.station {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
+.station { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .hidden { display: none !important; }
 
-/* Estilos de la Báscula */
+/* Elementos Comunes */
+.instruccion { font-weight: bold; margin-bottom: 20px; height: 40px; }
+.portafiltro-circle {
+    width: 220px; height: 220px;
+    background: #555; border: 10px solid #333;
+    border-radius: 50%; position: relative; overflow: hidden;
+    box-shadow: inset 0 0 20px black;
+}
+
+/* Estación 1: Báscula */
 .bascula {
-    background-color: #333;
-    color: #00ff00;
-    font-family: 'Courier New', monospace;
-    font-size: 3.5rem;
-    padding: 20px;
-    border-radius: 10px;
-    border: 4px solid var(--gris);
-    margin: 20px 0;
+    background: #222; color: #0f0;
+    font-family: monospace; font-size: 3.5rem;
+    padding: 20px; border-radius: 10px; border: 4px solid var(--gris);
 }
 
-/* Estilos del Portafiltro */
-#portafiltro-area {
-    width: 200px;
-    height: 200px;
-    background: #ccc;
-    border-radius: 50%;
-    position: relative;
-    border: 10px solid #555;
-    overflow: hidden;
+/* Estación 2: Molienda */
+#suciedad { position: absolute; width: 100%; height: 100%; background: #4a3728; opacity: 0.5; }
+#cafe-molido { position: absolute; bottom: -100%; width: 100%; height: 100%; background: #3d2b1f; transition: bottom 0.1s; }
+
+/* Estación 3: WDT y Tamp */
+#cafe-puck { position: absolute; width: 100%; height: 100%; background: #3d2b1f; }
+#grumos { 
+    position: absolute; width: 100%; height: 100%; 
+    background-image: radial-gradient(#222 10%, transparent 20%);
+    background-size: 30px 30px; opacity: 0.8;
 }
 
-#suciedad {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, #8b5a2b 0%, rgba(0,0,0,0) 70%);
-    opacity: 0.6;
-    transition: opacity 0.3s;
+#medidor-presion {
+    width: 200px; height: 20px; background: #ccc;
+    margin-top: 20px; border-radius: 10px; position: relative;
 }
-
-#cafe-molido {
-    position: absolute;
-    bottom: -100%;
-    width: 100%;
-    height: 100%;
-    background: #3d2b1f;
-    transition: bottom 2s linear;
+#zona-perfecta {
+    position: absolute; left: 70%; width: 20%; height: 100%;
+    background: var(--exito); opacity: 0.6;
+}
+#aguja-presion {
+    position: absolute; left: 0%; width: 5px; height: 100%;
+    background: var(--alerta); transition: left 0.1s;
 }
 
 /* Botones */
-button {
-    padding: 15px 25px;
-    border-radius: 12px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 1rem;
-    margin: 10px;
-}
-
-#btn-verter, #btn-moler {
-    background-color: var(--acento);
-    color: white;
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-}
-
-.btn-next { background-color: var(--exito); color: white; }
-.btn-back { background-color: var(--gris); color: white; }
+button { border: none; cursor: pointer; font-weight: bold; }
+.btn-main { background: var(--acento); color: white; width: 150px; height: 150px; border-radius: 50%; box-shadow: 0 5px #5d3a1a; }
+.btn-next { background: var(--exito); color: white; padding: 15px 30px; border-radius: 10px; }
+.btn-back { background: var(--gris); color: white; padding: 10px 20px; border-radius: 10px; }
