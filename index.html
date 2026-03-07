@@ -9,56 +9,54 @@
 <body>
     <div id="app-wrapper">
         <header>
-            <h1>Katy's Coffee Studio ☕ <small>Maestría: <span id="maestria">0</span></small></h1>
+            <h3>Katy's Coffee Studio ☕ | Maestría: <span id="maestria">0</span></h3>
         </header>
 
         <div id="barista-bench">
-            
-            <div class="tool-station" id="station-scale">
-                <p>1. Pesaje (18g)</p>
-                <div class="bascula"><span id="peso-actual">0.0</span>g</div>
-                <button id="btn-verter" class="ctrl-btn">VERTER</button>
-                <button onclick="reiniciarPeso()" class="mini-btn">Reiniciar</button>
+            <div class="station" id="st-1">
+                <span class="step-label">1. Pesaje (18.0g)</span>
+                <div class="lcd-display" id="peso-display">0.0g</div>
+                <button id="btn-verter" class="main-btn">VERTER</button>
+                <button onclick="reiniciarPeso()" class="reset-btn">Reset</button>
             </div>
 
-            <div class="tool-station locked" id="station-grinder">
-                <p>2. Molienda</p>
-                <div class="portafiltro-circle" id="area-molienda">
+            <div class="station locked" id="st-2">
+                <span class="step-label">2. Molienda</span>
+                <div class="circle-ui" id="area-molienda">
                     <div id="suciedad"></div>
                     <div id="cafe-molido"></div>
                 </div>
-                <button id="btn-moler" class="ctrl-btn hidden">MOLER</button>
+                <button id="btn-moler" class="main-btn hidden">MOLER</button>
             </div>
 
-            <div class="tool-station locked" id="station-tamp">
-                <p>3. WDT & Tamp</p>
-                <div class="portafiltro-circle" id="area-tamp">
+            <div class="station locked" id="st-3">
+                <span class="step-label" id="label-tamp">3. WDT (Limpia grumos)</span>
+                <div class="progress-bar-container"><div id="wdt-progress"></div></div>
+                <div class="circle-ui" id="area-tamp">
                     <div id="cafe-puck"></div>
                     <div id="grumos"></div>
                 </div>
-                <div id="medidor-presion" class="hidden">
-                    <div id="zona-perfecta"></div>
-                    <div id="aguja-presion"></div>
+                <div id="tamp-ui" class="hidden">
+                    <div class="pressure-gauge"><div id="gauge-zone"></div><div id="needle"></div></div>
+                    <button id="btn-tamp" class="main-btn">TAMP</button>
                 </div>
-                <button id="btn-tamp" class="ctrl-btn hidden">TAMP</button>
             </div>
 
-            <div class="tool-station locked" id="station-machine">
-                <p>4. Extracción (36g)</p>
-                <div id="taza-area">
-                    <div id="chorro-cafe"></div>
-                    <div id="liquido-taza"></div>
+            <div class="station locked" id="st-4">
+                <span class="step-label">4. Extracción (36.0g)</span>
+                <div class="cup-container">
+                    <div id="stream"></div>
+                    <div id="liquid"></div>
                 </div>
-                <div class="bascula"><span id="peso-extraccion">0.0</span>g</div>
-                <button id="btn-extraer" class="ctrl-btn">START</button>
+                <div class="lcd-display" id="ext-display">0.0g</div>
+                <button id="btn-extraer" class="main-btn">START</button>
             </div>
 
-            <div class="tool-station locked" id="station-art">
-                <p>5. Arte Latte</p>
-                <canvas id="canvas-diseno" width="200" height="200"></canvas>
-                <button onclick="finalizarTodo()" class="ctrl-btn">SERVIR</button>
+            <div class="station locked" id="st-5">
+                <span class="step-label">5. Arte Latte</span>
+                <canvas id="canvas-art" width="140" height="140"></canvas>
+                <button onclick="finalizar()" class="main-btn success">SERVIR</button>
             </div>
-
         </div>
     </div>
     <script src="script.js"></script>
