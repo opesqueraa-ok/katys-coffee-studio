@@ -1,35 +1,38 @@
 :root {
-    --cafe: #4a3728; --crema: #f4ece1; --acento: #8b5a2b; --exito: #4caf50; --oro: #d4af37;
+    --cafe: #4a3728; --crema: #f4ece1; --acento: #8b5a2b; --exito: #4caf50;
+}
+
+/* IMPORTANTE: Evita el zoom y desplazamientos raros en iPad */
+* {
+    touch-action: none; 
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
     margin: 0; background-color: var(--crema); color: var(--cafe);
-    font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center;
-    touch-action: none; user-select: none;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: flex; justify-content: center; height: 100vh; overflow: hidden;
 }
 
 #game-container {
     width: 100vw; height: 100vh; max-width: 500px;
-    display: flex; flex-direction: column; padding: 15px; box-sizing: border-box;
+    display: flex; flex-direction: column; padding: 20px; box-sizing: border-box;
 }
 
-.station { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.station { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; }
 .hidden { display: none !important; }
 
-/* UI */
-.bascula { background: #222; color: #0f0; font-family: monospace; font-size: 3rem; padding: 15px; border-radius: 10px; margin: 10px; }
-.portafiltro-circle { width: 200px; height: 200px; background: #555; border: 8px solid #333; border-radius: 50%; position: relative; overflow: hidden; }
+.bascula { background: #1a1a1a; color: #0f0; font-family: monospace; font-size: 3rem; padding: 15px; border-radius: 10px; border: 4px solid #555; }
+.portafiltro-circle { width: 220px; height: 220px; background: #555; border: 10px solid #333; border-radius: 50%; position: relative; overflow: hidden; }
 
-/* Extracción */
-#taza-area { width: 150px; height: 120px; background: #ddd; border: 5px solid #bbb; border-radius: 0 0 50px 50px; position: relative; margin-bottom: 10px; overflow: hidden;}
-#chorro-cafe { width: 6px; height: 100px; background: #3d2b1f; position: absolute; left: 48%; top: -100px; transition: top 0.2s; z-index: 2; }
+#suciedad { position: absolute; width: 100%; height: 100%; background: #2b1a0e; opacity: 0.8; z-index: 2; }
+#cafe-molido { position: absolute; bottom: -100%; width: 100%; height: 100%; background: #3d2b1f; z-index: 1; }
+
+#taza-area { width: 160px; height: 120px; background: #eee; border-radius: 0 0 60px 60px; position: relative; overflow: hidden; border: 4px solid #ccc; }
+#chorro-cafe { width: 8px; height: 120px; background: #3d2b1f; position: absolute; left: 47%; top: 0; z-index: 5; }
 #liquido-taza { position: absolute; bottom: 0; width: 100%; height: 0%; background: #2b1a0e; transition: height 0.1s; }
 
-/* Canvas */
-#canvas-diseno { background: #2b1a0e; border-radius: 50%; border: 8px solid #f4ece1; box-shadow: 0 0 15px rgba(0,0,0,0.3); }
+canvas { background: #2b1a0e; border-radius: 50%; border: 10px solid #fff; }
 
-/* Botones */
-button { border: none; font-weight: bold; cursor: pointer; transition: 0.2s; }
-.btn-main { background: var(--acento); color: white; width: 120px; height: 120px; border-radius: 50%; font-size: 1.2rem; box-shadow: 0 6px #5d3a1a; }
-.btn-main:active { transform: scale(0.95); box-shadow: 0 2px #5d3a1a; }
-.btn-next { background: var(--exito); color: white; padding: 15px 30px; border-radius: 12px; margin-top: 20px; }
+.btn-main { background: var(--acento); color: white; width: 130px; height: 130px; border-radius: 50%; font-size: 1.1rem; box-shadow: 0 6px #5d3a1a; }
+.btn-next { background: var(--exito); color: white; padding: 15px 40px; border-radius: 15px; font-size: 1.2rem; }
