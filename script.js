@@ -1,134 +1,131 @@
-// 1. BLOQUEO TOTAL DE ZOOM PARA SAFARI/IPAD
-document.addEventListener('gesturestart', function (e) { e.preventDefault(); });
-document.addEventListener('dblclick', function (e) { e.preventDefault(); });
+// BLOQUEO DE ZOOM
+document.addEventListener('gesturestart', (e) => e.preventDefault());
+document.addEventListener('dblclick', (e) => e.preventDefault());
 
 let estado = {
     maestria: parseInt(localStorage.getItem('katy_maestria')) || 0,
     peso: 0, limpieza: 0, molienda: 0, wdt: 0, presion: 0, extraccion: 0
 };
 
-document.getElementById('maestria').innerText = estado.maestria;
+const updateM = () => document.getElementById('maestria').innerText = estado.maestria;
+updateM();
 
-// --- ESTACIÓN 1: PESADO ---
+// 1. PESAJE (Manual)
 let intPeso;
-const btnVerter = document.getElementById('btn-verter');
-btnVerter.addEventListener('touchstart', (e) => {
+const btnV = document.getElementById('btn-verter');
+btnV.addEventListener('touchstart', (e) => {
     e.preventDefault();
     intPeso = setInterval(() => {
-        if (estado.peso < 20) {
-            estado.peso += 0.2;
-            document.getElementById('peso-actual').innerText = estado.peso.toFixed(1);
-            if (estado.peso.toFixed(1) === "18.0") {
-                clearInterval(intPeso);
-                desbloquear('station-grinder');
-                btnVerter.style.background = "#4caf50";
-            }
-        }
+        estado.peso += 0.1;
+        document.getElementById('peso-display').innerText = estado.peso.toFixed(1) + "g";
     }, 40);
 });
-btnVerter.addEventListener('touchend', () => clearInterval(intPeso));
+
+btnV.addEventListener('touchend', () => {
+    clearInterval(intPeso);
+    if (estado.peso.toFixed(1) === "18.0") {
+        desbloquear('st-2');
+        btnV.classList.add('success');
+        btnV.innerText = "¡PERFECTO!";
+    } else {
+        btnV.style.background = "#ff4444";
+        setTimeout(() => btnV.style.background = "#6f4e37", 500);
+    }
+});
 
 function reiniciarPeso() {
     estado.peso = 0;
-    document.getElementById('peso-actual').innerText = "0.0";
-    btnVerter.style.background = "#8b5a2b";
+    document.getElementById('peso-display').innerText = "0.0g";
+    btnV.classList.remove('success');
+    btnV.innerText = "VERTER";
 }
 
-// --- ESTACIÓN 2: MOLIENDA ---
-document.getElementById('area-molienda').addEventListener('touchmove', (e) => {
+// 2. MOLIENDA
+document.getElementById('area-molienda').addEventListener('touchmove', () => {
     if (estado.limpieza < 100) {
-        estado.limpieza += 5;
+        estado.limpieza += 4;
         document.getElementById('suciedad').style.opacity = (0.8 - estado.limpieza/125);
         if (estado.limpieza >= 100) document.getElementById('btn-moler').classList.remove('hidden');
     }
 });
 
-let intMolienda;
-document.getElementById('btn-moler').addEventListener('touchstart', (e) => {
-    intMolienda = setInterval(() => {
+document.getElementById('btn-moler').addEventListener('touchstart', () => {
+    let intM = setInterval(() => {
         estado.molienda += 5;
         document.getElementById('cafe-molido').style.bottom = (estado.molienda - 100) + "%";
-        if (estado.molienda >= 100) {
-            clearInterval(intMolienda);
-            desbloquear('station-tamp');
-        }
+        if (estado.molienda >= 100) { clearInterval(intM); desbloquear('st-3'); }
     }, 50);
 });
 
-// --- ESTACIÓN 3: WDT & TAMP ---
-document.getElementById('area-tamp').addEventListener('touchmove', (e) => {
+// 3. WDT & TAMP (Corregido)
+document.getElementById('area-tamp').addEventListener('touchmove', () => {
     if (estado.wdt < 100) {
-        estado.wdt += 3;
+        estado.wdt += 2;
+        document.getElementById('wdt-progress').style.width = estado.wdt + "%";
         document.getElementById('grumos').style.opacity = (0.8 - estado.wdt/125);
         if (estado.wdt >= 100) {
-            document.getElementById('btn-tamp').classList.remove('hidden');
-            document.getElementById('medidor-presion').classList.remove('hidden');
+            document.getElementById('label-tamp').innerText = "3. Presión de Tamp";
+            document.getElementById('tamp-ui').classList.remove('hidden');
         }
     }
 });
 
-let intTamp;
+let intT;
 document.getElementById('btn-tamp').addEventListener('touchstart', () => {
-    intTamp = setInterval(() => {
+    intT = setInterval(() => {
         estado.presion += 4;
-        document.getElementById('aguja-presion').style.left = estado.presion + "%";
-    }, 30);
+        document.getElementById('needle').style.left = estado.presion + "%";
+    }, 40);
 });
+
 document.getElementById('btn-tamp').addEventListener('touchend', () => {
-    clearInterval(intTamp);
+    clearInterval(intT);
     if (estado.presion >= 70 && estado.presion <= 90) {
-        desbloquear('station-machine');
+        desbloquear('st-4');
+        document.getElementById('btn-tamp').classList.add('success');
     } else {
         estado.presion = 0;
-        document.getElementById('aguja-presion').style.left = "0%";
+        document.getElementById('needle').style.left = "0%";
     }
 });
 
-// --- ESTACIÓN 4: EXTRACCIÓN ---
-let intExt;
+// 4. EXTRACCIÓN
+let intE;
 document.getElementById('btn-extraer').addEventListener('touchstart', () => {
-    document.getElementById('chorro-cafe').style.top = "0px";
-    intExt = setInterval(() => {
-        estado.extraccion += 0.8;
-        document.getElementById('peso-extraccion').innerText = estado.extraccion.toFixed(1);
-        document.getElementById('liquido-taza').style.height = (estado.extraccion * 2.5) + "%";
-        if (estado.extraccion >= 50) clearInterval(intExt);
-    }, 50);
+    document.getElementById('stream').style.top = "0";
+    intE = setInterval(() => {
+        estado.extraccion += 0.5;
+        document.getElementById('ext-display').innerText = estado.extraccion.toFixed(1) + "g";
+        document.getElementById('liquid').style.height = (estado.extraccion * 2.5) + "%";
+    }, 40);
 });
+
 document.getElementById('btn-extraer').addEventListener('touchend', () => {
-    clearInterval(intExt);
-    document.getElementById('chorro-cafe').style.top = "-100px";
-    if (estado.extraccion >= 35.8 && estado.extraccion <= 36.5) {
-        desbloquear('station-art');
+    clearInterval(intE);
+    document.getElementById('stream').style.top = "-60px";
+    if (estado.extraccion >= 35.8 && estado.extraccion <= 36.2) {
+        desbloquear('st-5');
         iniciarCanvas();
     }
 });
 
-// --- ESTACIÓN 5: ARTE Y FINALIZAR ---
+// 5. CANVAS & FINAL
 function iniciarCanvas() {
-    const canvas = document.getElementById('canvas-diseno');
-    const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = "#fff"; ctx.lineWidth = 8; ctx.lineCap = "round";
-    canvas.addEventListener('touchmove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.touches[0].clientX - rect.left;
-        const y = e.touches[0].clientY - rect.top;
+    const cvs = document.getElementById('canvas-art');
+    const ctx = cvs.getContext('2d');
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 5;
+    cvs.addEventListener('touchmove', (e) => {
+        const r = cvs.getBoundingClientRect();
+        const x = e.touches[0].clientX - r.left;
+        const y = e.touches[0].clientY - r.top;
         ctx.lineTo(x, y); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x, y);
     });
 }
 
-function desbloquear(id) {
-    document.getElementById(id).classList.remove('locked');
-}
-
-function ganarMaestria(pts) {
-    estado.maestria += pts;
-    document.getElementById('maestria').innerText = estado.maestria;
+function desbloquear(id) { document.getElementById(id).classList.remove('locked'); }
+function finalizar() {
+    estado.maestria += 50;
     localStorage.setItem('katy_maestria', estado.maestria);
-}
-
-function finalizarTodo() {
-    ganarMaestria(100);
-    alert("¡Café de Especialidad Servido!");
+    alert("¡Café Perfecto!");
     location.reload();
 }
