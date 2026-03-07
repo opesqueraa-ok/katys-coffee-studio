@@ -1,89 +1,119 @@
-// --- ESTADO DEL JUEGO ---
+// --- ESTADO INICIAL ---
 let estado = {
     maestria: parseInt(localStorage.getItem('katy_maestria')) || 0,
     peso: 0.0,
-    limpieza: 0, // 0 a 100
-    molienda: 0
+    limpieza: 0,
+    molienda: 0,
+    wdt: 0,
+    presion: 0
 };
 
-// --- ELEMENTOS ---
 const displayMaestria = document.getElementById('maestria');
 displayMaestria.innerText = estado.maestria;
 
-// --- LÓGICA DE NAVEGACIÓN ---
-function irA(estacionId) {
+function irA(id) {
     document.querySelectorAll('.station').forEach(s => s.classList.add('hidden'));
-    document.getElementById(estacionId).classList.remove('hidden');
+    document.getElementById(id).classList.remove('hidden');
 }
 
-// --- ESTACIÓN 1: PESADO ---
-let intervaloPeso;
+// --- LOGICA ESTACIÓN 1: PESADO ---
+let intPeso;
 const btnVerter = document.getElementById('btn-verter');
-const displayPeso = document.getElementById('peso-actual');
-
 btnVerter.addEventListener('touchstart', (e) => {
     e.preventDefault();
-    intervaloPeso = setInterval(() => {
-        if (estado.peso < 20) {
+    intPeso = setInterval(() => {
+        if (estado.peso < 19) {
             estado.peso += 0.1;
-            displayPeso.innerText = estado.peso.toFixed(1);
+            document.getElementById('peso-actual').innerText = estado.peso.toFixed(1);
             if (estado.peso.toFixed(1) === "18.0") {
-                clearInterval(intervaloPeso);
-                document.getElementById('btn-ir-molienda').classList.remove('hidden');
-                btnVerter.classList.add('hidden');
+                clearInterval(intPeso);
                 ganarMaestria(10);
+                btnVerter.classList.add('hidden');
+                document.getElementById('btn-ir-molienda').classList.remove('hidden');
             }
         }
-    }, 50);
+    }, 60);
 });
+btnVerter.addEventListener('touchend', () => clearInterval(intPeso));
 
-btnVerter.addEventListener('touchend', () => clearInterval(intervaloPeso));
-
-document.getElementById('btn-reiniciar-peso').addEventListener('click', () => {
+function reiniciarPeso() {
     estado.peso = 0;
-    displayPeso.innerText = "0.0";
-});
+    document.getElementById('peso-actual').innerText = "0.0";
+    btnVerter.classList.remove('hidden');
+}
 
-// --- ESTACIÓN 2: MOLIENDA (LIMPIEZA) ---
-const suciedad = document.getElementById('suciedad');
-const areaPortafiltro = document.getElementById('portafiltro-area');
-
-areaPortafiltro.addEventListener('touchmove', (e) => {
+// --- LOGICA ESTACIÓN 2: MOLIENDA ---
+const areaMolienda = document.getElementById('portafiltro-area-molienda');
+areaMolienda.addEventListener('touchmove', (e) => {
     if (estado.limpieza < 100) {
         estado.limpieza += 2;
-        suciedad.style.opacity = (1 - estado.limpieza / 100);
+        document.getElementById('suciedad').style.opacity = (0.5 - estado.limpieza/200);
         if (estado.limpieza >= 100) {
-            document.getElementById('instruccion-molienda').innerText = "¡Limpio! Ahora muele el café.";
+            document.getElementById('instruccion-molienda').innerText = "¡Limpio! Ahora muele.";
             document.getElementById('btn-moler').classList.remove('hidden');
         }
     }
 });
 
-// Lógica de Molienda
-const cafeMolido = document.getElementById('cafe-molido');
-let intervaloMolienda;
-
+let intMolienda;
 document.getElementById('btn-moler').addEventListener('touchstart', (e) => {
     e.preventDefault();
-    cafeMolido.classList.remove('hidden');
-    intervaloMolienda = setInterval(() => {
+    document.getElementById('cafe-molido').classList.remove('hidden');
+    intMolienda = setInterval(() => {
         if (estado.molienda < 100) {
             estado.molienda += 1;
-            cafeMolido.style.bottom = (estado.molienda - 100) + "%";
+            document.getElementById('cafe-molido').style.bottom = (estado.molienda - 100) + "%";
             if (estado.molienda >= 100) {
-                clearInterval(intervaloMolienda);
-                document.getElementById('btn-ir-wdt').classList.remove('hidden');
+                clearInterval(intMolienda);
                 ganarMaestria(15);
+                document.getElementById('btn-ir-tamp').classList.remove('hidden');
             }
+        }
+    }, 40);
+});
+document.getElementById('btn-moler').addEventListener('touchend', () => clearInterval(intMolienda));
+
+// --- LOGICA ESTACIÓN 3: WDT Y TAMP ---
+const areaTamp = document.getElementById('area-tamp');
+areaTamp.addEventListener('touchmove', (e) => {
+    if (estado.wdt < 100) {
+        estado.wdt += 1;
+        document.getElementById('grumos').style.opacity = (0.8 - estado.wdt/125);
+        if (estado.wdt >= 100) {
+            document.getElementById('instruccion-tamp').innerText = "Café nivelado. Presiona con el Tamper.";
+            document.getElementById('medidor-presion').classList.remove('hidden');
+            document.getElementById('btn-tamp').classList.remove('hidden');
+        }
+    }
+});
+
+let intTamp;
+document.getElementById('btn-tamp').addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    intTamp = setInterval(() => {
+        if (estado.presion < 100) {
+            estado.presion += 2;
+            document.getElementById('aguja-presion').style.left = estado.presion + "%";
         }
     }, 30);
 });
 
-document.getElementById('btn-moler').addEventListener('touchend', () => clearInterval(intervaloMolienda));
+document.getElementById('btn-tamp').addEventListener('touchend', () => {
+    clearInterval(intTamp);
+    if (estado.presion >= 70 && estado.presion <= 90) {
+        document.getElementById('instruccion-tamp').innerText = "¡Presión Perfecta!";
+        document.getElementById('btn-finalizar').classList.remove('hidden');
+        document.getElementById('btn-tamp').classList.add('hidden');
+        ganarMaestria(20);
+    } else {
+        alert("Presión incorrecta. Intenta de nuevo.");
+        estado.presion = 0;
+        document.getElementById('aguja-presion').style.left = "0%";
+    }
+});
 
-// --- UTILIDADES ---
-function ganarMaestria(puntos) {
-    estado.maestria += puntos;
+function ganarMaestria(pts) {
+    estado.maestria += pts;
     displayMaestria.innerText = estado.maestria;
     localStorage.setItem('katy_maestria', estado.maestria);
 }
