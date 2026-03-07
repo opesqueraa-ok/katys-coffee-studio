@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Katy's Coffee Studio</title>
+    <title>Katy's Coffee Studio v1.1.1</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app-wrapper">
         <header>
-            <h3>Katy's Coffee Studio ☕ | Maestría: <span id="maestria">0</span></h3>
+            <h3>Katy's Coffee Studio ☕ | Caja: <span id="dinero-total">$0.00</span></h3>
         </header>
 
         <div id="barista-bench">
             <div class="station" id="st-1">
-                <span class="step-label">1. Pesaje (18.0g)</span>
+                <span class="step-label">1. Pesaje (Meta: 18.0g)</span>
                 <div class="lcd-display" id="peso-display">0.0g</div>
                 <button id="btn-verter" class="main-btn">VERTER</button>
-                <button onclick="reiniciarPeso()" class="reset-btn">Reset</button>
+                <button onclick="avanzarDePesaje()" id="btn-continuar-1" class="main-btn success hidden">Continuar →</button>
             </div>
 
             <div class="station locked" id="st-2">
@@ -43,19 +43,22 @@
             </div>
 
             <div class="station locked" id="st-4">
-                <span class="step-label">4. Extracción (36.0g)</span>
+                <span class="step-label">4. Extracción</span>
                 <div class="cup-container">
                     <div id="stream"></div>
-                    <div id="liquid"></div>
+                    <div id="target-line"></div> <div id="liquid"></div>
                 </div>
-                <div class="lcd-display" id="ext-display">0.0g</div>
                 <button id="btn-extraer" class="main-btn">START</button>
+                <button onclick="avanzarDeExtraccion()" id="btn-continuar-4" class="main-btn success hidden">Servir →</button>
             </div>
 
             <div class="station locked" id="st-5">
-                <span class="step-label">5. Arte Latte</span>
-                <canvas id="canvas-art" width="140" height="140"></canvas>
-                <button onclick="finalizar()" class="main-btn success">SERVIR</button>
+                <span class="step-label">5. Elige tu Arte Latte</span>
+                <div class="art-options">
+                    <button class="art-btn" onclick="seleccionarArte('Corazón')">🤍 Corazón</button>
+                    <button class="art-btn" onclick="seleccionarArte('Rayas')">🌿 Rayas</button>
+                    <button class="art-btn" onclick="seleccionarArte('Espiral')">🌀 Espiral</button>
+                </div>
             </div>
         </div>
     </div>
