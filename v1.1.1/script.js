@@ -1,4 +1,4 @@
-// BLOQUEO DE ZOOM
+// BLOQUEO DE ZOOM GLOBAL
 document.addEventListener('gesturestart', (e) => e.preventDefault());
 document.addEventListener('dblclick', (e) => e.preventDefault());
 
@@ -7,10 +7,10 @@ let estado = {
     peso: 0, limpieza: 0, molienda: 0, wdt: 0, presion: 0, extraccion: 0
 };
 
-const updateDinero = () => document.getElementById('dinero-total').innerText = "$" + estado.dinero.toFixed(2);
+const updateDinero = () => document.getElementById('dinero-total').innerText = "Q" + estado.dinero.toFixed(2);
 updateDinero();
 
-// 1. PESAJE (Libre, sin bloqueo automático)
+// 1. PESAJE
 let intPeso;
 const btnV = document.getElementById('btn-verter');
 btnV.addEventListener('touchstart', (e) => {
@@ -28,31 +28,40 @@ btnV.addEventListener('touchend', () => {
 });
 
 function avanzarDePesaje() {
-    desbloquear('st-2');
-    document.getElementById('st-1').classList.add('locked'); // Oculta el foco del anterior
+    document.getElementById('st-1').classList.add('locked');
+    desbloquearYCentrar('st-2');
 }
 
-// 2. MOLIENDA
-document.getElementById('area-molienda').addEventListener('touchmove', () => {
+// 2. MOLIENDA (Optimizado para iPad)
+const limpiarMolienda = (e) => {
+    if(e.cancelable) e.preventDefault(); // Evita que la pantalla haga scroll al limpiar
     if (estado.limpieza < 100) {
-        estado.limpieza += 4;
+        estado.limpieza += 5; // Aumenté la velocidad para que sea más satisfactorio
         document.getElementById('suciedad').style.opacity = (0.8 - estado.limpieza/125);
         if (estado.limpieza >= 100) document.getElementById('btn-moler').classList.remove('hidden');
     }
-});
+};
+document.getElementById('area-molienda').addEventListener('touchmove', limpiarMolienda, {passive: false});
+document.getElementById('area-molienda').addEventListener('touchstart', limpiarMolienda, {passive: false}); // También funciona con toques simples
 
-document.getElementById('btn-moler').addEventListener('touchstart', () => {
+document.getElementById('btn-moler').addEventListener('touchstart', (e) => {
+    e.preventDefault();
     let intM = setInterval(() => {
         estado.molienda += 5;
         document.getElementById('cafe-molido').style.bottom = (estado.molienda - 100) + "%";
-        if (estado.molienda >= 100) { clearInterval(intM); desbloquear('st-3'); document.getElementById('st-2').classList.add('locked'); }
+        if (estado.molienda >= 100) { 
+            clearInterval(intM); 
+            document.getElementById('st-2').classList.add('locked');
+            desbloquearYCentrar('st-3'); 
+        }
     }, 50);
 });
 
 // 3. WDT & TAMP
-document.getElementById('area-tamp').addEventListener('touchmove', () => {
+const hacerWDT = (e) => {
+    if(e.cancelable) e.preventDefault();
     if (estado.wdt < 100) {
-        estado.wdt += 2;
+        estado.wdt += 4;
         document.getElementById('wdt-progress').style.width = estado.wdt + "%";
         document.getElementById('grumos').style.opacity = (0.8 - estado.wdt/125);
         if (estado.wdt >= 100) {
@@ -60,10 +69,13 @@ document.getElementById('area-tamp').addEventListener('touchmove', () => {
             document.getElementById('tamp-ui').classList.remove('hidden');
         }
     }
-});
+};
+document.getElementById('area-tamp').addEventListener('touchmove', hacerWDT, {passive: false});
+document.getElementById('area-tamp').addEventListener('touchstart', hacerWDT, {passive: false});
 
 let intT;
-document.getElementById('btn-tamp').addEventListener('touchstart', () => {
+document.getElementById('btn-tamp').addEventListener('touchstart', (e) => {
+    e.preventDefault();
     intT = setInterval(() => {
         estado.presion += 4;
         document.getElementById('needle').style.left = estado.presion + "%";
@@ -73,21 +85,24 @@ document.getElementById('btn-tamp').addEventListener('touchstart', () => {
 document.getElementById('btn-tamp').addEventListener('touchend', () => {
     clearInterval(intT);
     if (estado.presion >= 70 && estado.presion <= 90) {
-        desbloquear('st-4');
         document.getElementById('btn-tamp').classList.add('success');
-        setTimeout(() => document.getElementById('st-3').classList.add('locked'), 500);
+        setTimeout(() => {
+            document.getElementById('st-3').classList.add('locked');
+            desbloquearYCentrar('st-4');
+        }, 500);
     } else {
         estado.presion = 0; document.getElementById('needle').style.left = "0%";
     }
 });
 
-// 4. EXTRACCIÓN (Libre, guiada por línea)
+// 4. EXTRACCIÓN
 let intE;
 const btnE = document.getElementById('btn-extraer');
-btnE.addEventListener('touchstart', () => {
+btnE.addEventListener('touchstart', (e) => {
+    e.preventDefault();
     document.getElementById('stream').style.top = "0";
     intE = setInterval(() => {
-        estado.extraccion += 1; // Crece visualmente por porcentaje
+        estado.extraccion += 1.5; 
         document.getElementById('liquid').style.height = estado.extraccion + "%";
     }, 40);
 });
@@ -100,34 +115,38 @@ btnE.addEventListener('touchend', () => {
 });
 
 function avanzarDeExtraccion() {
-    desbloquear('st-5');
     document.getElementById('st-4').classList.add('locked');
+    desbloquearYCentrar('st-5');
 }
 
-// 5. ARTE & CALCULO DE VENTA
+// 5. ARTE & CÁLCULO DE VENTA EN QUETZALES
 function seleccionarArte(arte) {
-    // Cálculo de ganancias
-    let gananciaBase = 2.50; // $2.50 base por el café
+    let gananciaBase = 25.00; // Q25.00 base por el café
     
     // Penalización por pesaje (Ideal: 18.0)
     let errorPeso = Math.abs(18.0 - estado.peso);
-    let bonoPeso = Math.max(0, 1.50 - (errorPeso * 0.5)); // Pierde dinero si se aleja de 18
+    let bonoPeso = Math.max(0, 10.00 - (errorPeso * 4.00)); // Pierde dinero si se aleja
     
-    // Penalización por extracción (Ideal: 70% de la taza, donde está la línea)
+    // Penalización por extracción (Ideal: 70% de la taza)
     let errorExtraccion = Math.abs(70 - estado.extraccion);
-    let bonoExtraccion = Math.max(0, 2.00 - (errorExtraccion * 0.1)); // Pierde dinero si se aleja de la línea
+    let bonoExtraccion = Math.max(0, 15.00 - (errorExtraccion * 0.5)); 
     
     let pagoFinal = gananciaBase + bonoPeso + bonoExtraccion;
     
     estado.dinero += pagoFinal;
     localStorage.setItem('katy_dinero', estado.dinero);
     
-    let feedback = `¡Vendiste un latte con ${arte}!\n\nGanancia: $${pagoFinal.toFixed(2)}`;
-    if (errorPeso < 0.2 && errorExtraccion < 5) feedback += "\n🌟 ¡Extracción Perfecta! El cliente dejó propina.";
-    else if (errorPeso > 2 || errorExtraccion > 20) feedback += "\n⚠️ El café estaba un poco desbalanceado, menos propina.";
+    let feedback = `¡Vendiste un latte con ${arte}!\n\nGanancia: Q${pagoFinal.toFixed(2)}`;
+    if (errorPeso < 0.2 && errorExtraccion < 5) feedback += "\n🌟 ¡Taza Perfecta! El cliente dejó buena propina.";
+    else if (errorPeso > 2 || errorExtraccion > 20) feedback += "\n⚠️ Sabía un poco extraño, menos propina.";
     
     alert(feedback);
     location.reload();
 }
 
-function desbloquear(id) { document.getElementById(id).classList.remove('locked'); }
+// Auto-Scroll suave
+function desbloquearYCentrar(id) { 
+    const estacion = document.getElementById(id);
+    estacion.classList.remove('locked'); 
+    estacion.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+}
