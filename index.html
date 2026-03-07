@@ -10,23 +10,29 @@
     <div id="game-container">
         <header>
             <h1>Katy's Coffee Studio ☕</h1>
-            <div id="stats">
-                Puntos de Maestría: <span id="maestria">0</span>
-            </div>
+            <div id="stats">Maestría: <span id="maestria">0</span> pts</div>
         </header>
 
         <main id="station">
-            <h2 id="instruccion">¡Bienvenida, Barista! Toca el frasco de granos para empezar.</h2>
+            <div id="display-container">
+                <p id="instruccion">Paso 1: Pesa 18.0g de café</p>
+                <div id="bascula">
+                    <span id="peso-actual">0.0</span><span class="unit">g</span>
+                </div>
+            </div>
+
             <div id="interaction-area">
-                <button id="main-action">🫙 Granos de Café</button>
+                <div id="frasco-container">
+                    <div id="grano-visual"></div>
+                    <button id="btn-verter">Dejar presionado para verter</button>
+                </div>
+                <button id="btn-reiniciar" class="hidden">Reiniciar Pesaje</button>
+                <button id="btn-siguiente" class="hidden">¡Peso Perfecto! Siguiente Paso →</button>
             </div>
         </main>
 
-        <footer id="inventory">
-            <h3>Herramientas Desbloqueadas:</h3>
-            <ul id="tools-list">
-                <li>✅ Molino Básico</li>
-            </ul>
+        <footer>
+            <p>Sugerencia: Suelta cerca de los 17.8g para no pasarte.</p>
         </footer>
     </div>
     <script src="script.js"></script>
