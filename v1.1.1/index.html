@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Katy's Coffee Studio v1.1.1</title>
+    <title>Katy's Coffee Studio v1.1.2</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app-wrapper">
         <header>
-            <h3>Katy's Coffee Studio ☕ | Caja: <span id="dinero-total">$0.00</span></h3>
+            <h3>Katy's Coffee Studio ☕ v1.1.2 | Caja: <span id="dinero-total">Q0.00</span></h3>
         </header>
 
         <div id="barista-bench">
@@ -21,7 +21,7 @@
             </div>
 
             <div class="station locked" id="st-2">
-                <span class="step-label">2. Molienda</span>
+                <span class="step-label">2. Limpia y Muele</span>
                 <div class="circle-ui" id="area-molienda">
                     <div id="suciedad"></div>
                     <div id="cafe-molido"></div>
@@ -46,7 +46,8 @@
                 <span class="step-label">4. Extracción</span>
                 <div class="cup-container">
                     <div id="stream"></div>
-                    <div id="target-line"></div> <div id="liquid"></div>
+                    <div id="target-line"></div>
+                    <div id="liquid"></div>
                 </div>
                 <button id="btn-extraer" class="main-btn">START</button>
                 <button onclick="avanzarDeExtraccion()" id="btn-continuar-4" class="main-btn success hidden">Servir →</button>
