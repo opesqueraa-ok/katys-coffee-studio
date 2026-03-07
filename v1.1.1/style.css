@@ -2,7 +2,7 @@
     --bg: #1e1e1e; --panel: #ffffff; --accent: #6f4e37; --lcd: #00ff00; --text: #333;
 }
 
-* { touch-action: none; -webkit-user-select: none; user-select: none; }
+* { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
 
 body { margin: 0; background: var(--bg); font-family: -apple-system, sans-serif; overflow: hidden; }
 
@@ -11,42 +11,43 @@ header { background: #000; color: #fff; padding: 10px; text-align: center; font-
 #barista-bench {
     display: flex; overflow-x: auto; padding: 15px; gap: 15px;
     background: #e0d7cf; height: calc(100vh - 50px); align-items: center;
+    touch-action: pan-x; scroll-behavior: smooth; /* Permite scroll horizontal */
 }
 
 .station {
     min-width: 180px; height: 320px; background: var(--panel); border-radius: 15px;
     display: flex; flex-direction: column; align-items: center; justify-content: space-around;
-    padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.3s;
+    padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.5s ease-in-out;
 }
 
 .locked { opacity: 0.4; pointer-events: none; filter: grayscale(1); }
 .step-label { font-size: 0.75rem; font-weight: bold; color: var(--text); text-align: center; }
 
 .lcd-display { background: #222; color: var(--lcd); font-family: monospace; font-size: 1.8rem; padding: 5px 15px; border-radius: 5px; border: 2px solid #555; }
-.circle-ui { width: 100px; height: 100px; background: #444; border-radius: 50%; position: relative; overflow: hidden; border: 4px solid #222; }
+
+/* Importante: Bloquea el scroll SOLO al tocar los círculos */
+.circle-ui { touch-action: none; width: 100px; height: 100px; background: #444; border-radius: 50%; position: relative; overflow: hidden; border: 4px solid #222; }
 
 #suciedad { position: absolute; width: 100%; height: 100%; background: #2b1a0e; opacity: 0.8; z-index: 2; }
-#cafe-molido { position: absolute; bottom: -100%; width: 100%; height: 100%; background: #3d2b1f; }
+#cafe-molido { position: absolute; bottom: -100%; width: 100%; height: 100%; background: #3d2b1f; transition: bottom 0.1s; }
 #grumos { position: absolute; width: 100%; height: 100%; background: radial-gradient(#111 15%, transparent 20%); background-size: 15px 15px; opacity: 0.8; }
 #cafe-puck { position: absolute; width: 100%; height: 100%; background: #3d2b1f; }
 
 .progress-bar-container { width: 80%; height: 6px; background: #eee; border-radius: 3px; overflow: hidden; }
-#wdt-progress { width: 0%; height: 100%; background: var(--accent); }
+#wdt-progress { width: 0%; height: 100%; background: var(--accent); transition: width 0.1s; }
 
 .pressure-gauge { width: 100px; height: 10px; background: #ccc; position: relative; margin-top: 5px; border-radius: 5px; }
 #gauge-zone { position: absolute; left: 70%; width: 20%; height: 100%; background: #4caf50; opacity: 0.5; }
 #needle { position: absolute; left: 0; width: 4px; height: 100%; background: red; }
 
-/* Cup & Target Line */
-.cup-container { width: 80px; height: 80px; background: #fff; border: 2px solid #ccc; border-radius: 0 0 30px 30px; position: relative; overflow: hidden; }
+.cup-container { touch-action: none; width: 80px; height: 80px; background: #fff; border: 2px solid #ccc; border-radius: 0 0 30px 30px; position: relative; overflow: hidden; }
 #stream { width: 4px; height: 80px; background: #3d2b1f; position: absolute; left: 48%; top: -80px; }
-#liquid { position: absolute; bottom: 0; width: 100%; height: 0%; background: #2b1a0e; transition: height 0.1s; }
+#liquid { position: absolute; bottom: 0; width: 100%; height: 0%; background: #2b1a0e; }
 #target-line { position: absolute; bottom: 70%; width: 100%; border-bottom: 2px dashed #4caf50; z-index: 5; opacity: 0.6; }
 
-/* Arte Latte Buttons */
 .art-options { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-.art-btn { background: #f4ece1; border: 2px solid var(--accent); color: var(--accent); padding: 10px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; }
+.art-btn { background: #f4ece1; border: 2px solid var(--accent); color: var(--accent); padding: 10px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; cursor: pointer; }
 
-.main-btn { background: var(--accent); color: #fff; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; }
+.main-btn { background: var(--accent); color: #fff; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; cursor: pointer; }
 .success { background: #4caf50; }
 .hidden { display: none; }
