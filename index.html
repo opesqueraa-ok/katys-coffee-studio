@@ -13,26 +13,38 @@
             <div id="stats">Maestría: <span id="maestria">0</span> pts</div>
         </header>
 
-        <main id="station">
-            <div id="display-container">
-                <p id="instruccion">Paso 1: Pesa 18.0g de café</p>
-                <div id="bascula">
+        <section id="estacion-pesado" class="station">
+            <div class="display-container">
+                <p class="instruccion">Paso 1: Pesa 18.0g de café en granos</p>
+                <div class="bascula">
                     <span id="peso-actual">0.0</span><span class="unit">g</span>
                 </div>
             </div>
-
-            <div id="interaction-area">
-                <div id="frasco-container">
-                    <div id="grano-visual"></div>
-                    <button id="btn-verter">Dejar presionado para verter</button>
-                </div>
-                <button id="btn-reiniciar" class="hidden">Reiniciar Pesaje</button>
-                <button id="btn-siguiente" class="hidden">¡Peso Perfecto! Siguiente Paso →</button>
+            <div class="controls">
+                <button id="btn-verter">Dejar presionado para verter</button>
+                <button id="btn-reiniciar-peso" class="hidden">Reiniciar</button>
+                <button onclick="irA('estacion-molienda')" id="btn-ir-molienda" class="hidden btn-next">Siguiente: Moler →</button>
             </div>
-        </main>
+        </section>
+
+        <section id="estacion-molienda" class="station hidden">
+            <div class="display-container">
+                <p id="instruccion-molienda" class="instruccion">Paso 2: Limpia el portafiltro deslizando el dedo</p>
+                <div id="portafiltro-area">
+                    <div id="portafiltro">
+                        <div id="suciedad"></div> <div id="cafe-molido" class="hidden"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <button id="btn-moler" class="hidden">Mantener para moler café</button>
+                <button onclick="irA('estacion-pesado')" class="btn-back">← Volver</button>
+                <button id="btn-ir-wdt" class="hidden btn-next">Siguiente: Nivelar →</button>
+            </div>
+        </section>
 
         <footer>
-            <p>Sugerencia: Suelta cerca de los 17.8g para no pasarte.</p>
+            <p id="pista">La precisión es la clave de un buen espresso.</p>
         </footer>
     </div>
     <script src="script.js"></script>
